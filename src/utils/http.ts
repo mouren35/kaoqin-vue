@@ -1,5 +1,8 @@
 import axios from 'axios'
 import type { AxiosRequestConfig, AxiosResponse } from 'axios'
+import store from '@/store';
+import type { StateAll } from '@/store'
+import { ElMessage } from 'element-plus';
 
 const instance = axios.create({
   baseURL: 'http://localhost:3000/',
@@ -7,12 +10,22 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use(function (config) {
+  if(config.headers){
+    config.headers.authorization = (store.state as StateAll).users.token;
+  }
   return config;
 }, function (error) {
   return Promise.reject(error);
 });
 
 instance.interceptors.response.use(function (response) {
+  if(response.data.errmsg === 'token error'){
+    ElMessage.error('token error');
+    store.commit('users/clearToken');
+    setTimeout(()=>{
+      window.location.replace('/login');
+    }, 1000)
+  }
   return response;
 }, function (error) {
   return Promise.reject(error);
