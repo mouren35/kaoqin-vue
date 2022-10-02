@@ -42,6 +42,22 @@ const routes: Array<RouteRecordRaw> = [
           icon: 'calendar',
           auth: true
         },
+        beforeEnter(to, from, next){
+          const usersInfos = (store.state as StateAll).users.infos;
+          const signsInfos = (store.state as StateAll).signs.infos;
+
+          if( _.isEmpty(signsInfos) ){
+            store.dispatch('signs/getTime', { userid: usersInfos._id }).then((res)=>{
+              if(res.data.errcode === 0){
+                store.commit('signs/updateInfos', res.data.infos)
+                next()
+              }
+            })
+          }
+          else{
+            next()
+          }
+        }
       },
       {
         path: 'exception',
@@ -52,6 +68,22 @@ const routes: Array<RouteRecordRaw> = [
           title: '异常考勤查询',
           icon: 'warning',
           auth: true,
+        },
+        beforeEnter(to, from, next){
+          const usersInfos = (store.state as StateAll).users.infos;
+          const signsInfos = (store.state as StateAll).signs.infos;
+
+          if( _.isEmpty(signsInfos) ){
+            store.dispatch('signs/getTime', { userid: usersInfos._id }).then((res)=>{
+              if(res.data.errcode === 0){
+                store.commit('signs/updateInfos', res.data.infos)
+                next()
+              }
+            })
+          }
+          else{
+            next()
+          }
         }
       },
       {
