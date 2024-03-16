@@ -1,32 +1,31 @@
-
-import http from '@/utils/http';
-import type { MutationTree, ActionTree, GetterTree } from 'vuex'
-import type { State } from '../index'
+import http from "@/utils/http";
+import type { MutationTree, ActionTree, GetterTree } from "vuex";
+import type { State } from "../index";
 
 interface Infos {
-  [index: string]: unknown
+  [index: string]: unknown;
 }
 
 export interface SignsState {
-  infos: Infos
+  infos: Infos;
 }
 
 const state: SignsState = {
-  infos: {}
+  infos: {},
 };
 
 const mutations: MutationTree<SignsState> = {
-  updateInfos(state, payload){
+  updateInfos(state, payload) {
     state.infos = payload;
-  }
+  },
 };
 const actions: ActionTree<SignsState, State> = {
-  getTime(context, payload){
-    return http.get('/signs/time', payload);
+  getTime(context, payload) {
+    return http.get("/signs/time", payload);
   },
-  putTime(context, payload){
-    return http.put('/signs/time', payload);
-  }
+  putTime(context, payload) {
+    return http.put("/signs/time", payload);
+  },
 };
 const getters: GetterTree<SignsState, State> = {};
 
@@ -35,5 +34,5 @@ export default {
   state,
   mutations,
   actions,
-  getters
-}
+  getters,
+};

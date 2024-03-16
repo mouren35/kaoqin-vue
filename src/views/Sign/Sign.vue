@@ -1,7 +1,7 @@
 <template>
   <el-descriptions border direction="vertical" :column="9">
     <el-descriptions-item label="月份">{{ month }}月</el-descriptions-item>
-    <el-descriptions-item v-for="value, key in DetailKey" :key="key" :label="value">
+    <el-descriptions-item v-for="(value, key) in DetailKey" :key="key" :label="value">
       {{ detailValue[key] }}
     </el-descriptions-item>
     <el-descriptions-item label="操作">
@@ -29,29 +29,29 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
-import { useStore } from '@/store'
-import { ElMessage } from 'element-plus'
-import { toZero } from '@/utils/common'
+import { ref, reactive, computed, watchEffect } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "@/store";
+import { ElMessage } from "element-plus";
+import { toZero } from "@/utils/common";
 
-const router = useRouter()
-const store = useStore()
+const router = useRouter();
+const store = useStore();
 
-const signsInfos = computed(()=> store.state.signs.infos)
-const usersInfos = computed(()=> store.state.users.infos)
+const signsInfos = computed(() => store.state.signs.infos);
+const usersInfos = computed(() => store.state.users.infos);
 
-const date = ref(new Date())
-const year = date.value.getFullYear()
-const month = ref(date.value.getMonth() + 1)
+const date = ref(new Date());
+const year = date.value.getFullYear();
+const month = ref(date.value.getMonth() + 1);
 
 enum DetailKey {
-  normal = '正常出勤',
-  absent = '旷工',
-  miss = '漏打卡',
-  late = '迟到',
-  early = '早退',
-  lateAndEarly = '迟到并早退'
+  normal = "正常出勤",
+  absent = "旷工",
+  miss = "漏打卡",
+  late = "迟到",
+  early = "早退",
+  lateAndEarly = "迟到并早退",
 }
 
 const detailValue = reactive({
@@ -60,98 +60,98 @@ const detailValue = reactive({
   miss: 0,
   late: 0,
   early: 0,
-  lateAndEarly: 0
-})
+  lateAndEarly: 0,
+});
 
 const detailState = reactive({
-  type: 'success' as 'success' | 'danger',
-  text: '正常' as '正常' | '异常'
-})
+  type: "success" as "success" | "danger",
+  text: "正常" as "正常" | "异常",
+});
 
-watchEffect((reset)=>{
+watchEffect((reset) => {
+  const detailMonth = (signsInfos.value.detail as { [index: string]: unknown })[toZero(month.value)] as {
+    [index: string]: unknown;
+  };
 
-  const detailMonth = ((signsInfos.value.detail as {[index: string]: unknown})[toZero(month.value)] as {[index: string]: unknown})
-
-  for(const attr in detailMonth){
-    switch( detailMonth[attr] ){
+  for (const attr in detailMonth) {
+    switch (detailMonth[attr]) {
       case DetailKey.normal:
-        detailValue.normal++
-        break
+        detailValue.normal++;
+        break;
       case DetailKey.absent:
-        detailValue.absent++
-        break
+        detailValue.absent++;
+        break;
       case DetailKey.miss:
-        detailValue.miss++
-        break
+        detailValue.miss++;
+        break;
       case DetailKey.late:
-        detailValue.late++
-        break
+        detailValue.late++;
+        break;
       case DetailKey.early:
-        detailValue.early++
-        break
+        detailValue.early++;
+        break;
       case DetailKey.lateAndEarly:
-        detailValue.lateAndEarly++
-        break
+        detailValue.lateAndEarly++;
+        break;
     }
   }
 
-  for(const attr in detailValue){
-    if( attr !== 'normal' && detailValue[attr as keyof typeof detailValue] !== 0){
-      detailState.type = 'danger'
-      detailState.text = '异常'
+  for (const attr in detailValue) {
+    if (attr !== "normal" && detailValue[attr as keyof typeof detailValue] !== 0) {
+      detailState.type = "danger";
+      detailState.text = "异常";
     }
   }
 
-  reset(()=>{
+  reset(() => {
+    detailState.type = "success";
+    detailState.text = "正常";
 
-    detailState.type = 'success'
-    detailState.text = '正常'
-
-    for(const attr in detailValue){
-      detailValue[attr as keyof typeof detailValue] = 0
+    for (const attr in detailValue) {
+      detailValue[attr as keyof typeof detailValue] = 0;
     }
-
-  })
-
-})
+  });
+});
 
 const handleChange = () => {
-  date.value = new Date(`${year}.${month.value}`)
-}
+  date.value = new Date(`${year}.${month.value}`);
+};
 const handleToException = () => {
   router.push({
-    path: '/exception',
-    query: { month: month.value }
+    path: "/exception",
+    query: { month: month.value },
   });
-}
+};
 const renderDate = (day: string) => {
-  return day.split('-')[2];
-}
+  return day.split("-")[2];
+};
 const renderTime = (day: string) => {
-  const [, month, date] = day.split('-');
-  const ret = ((signsInfos.value.time as {[index: string]: unknown})[month] as {[index: string]: unknown})[date];
-  if( Array.isArray(ret) ){
-    return ret.join('-')
+  const [, month, date] = day.split("-");
+  const ret = ((signsInfos.value.time as { [index: string]: unknown })[month] as { [index: string]: unknown })[date];
+  if (Array.isArray(ret)) {
+    return ret.join("-");
   }
-}
+};
 const handlePutTime = () => {
-  store.dispatch('signs/putTime', {userid: usersInfos.value._id}).then((res)=>{
-    if(res.data.errcode === 0){
-      store.commit('signs/updateInfos', res.data.infos);
-      ElMessage.success('签到成功')
+  store.dispatch("signs/putTime", { userid: usersInfos.value._id }).then((res) => {
+    if (res.data.errcode === 0) {
+      store.commit("signs/updateInfos", res.data.infos);
+      ElMessage.success("签到成功");
     }
-  })
-}
+  });
+};
 </script>
 
 <style scoped lang="scss">
-.el-descriptions{
+.el-descriptions {
   margin: 10px;
 }
-.el-select{
+
+.el-select {
   width: 80px;
 }
-.show-time{
+
+.show-time {
   text-align: center;
   line-height: 40px;
   white-space: nowrap;
