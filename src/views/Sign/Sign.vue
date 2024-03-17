@@ -41,6 +41,7 @@ const store = useStore();
 const signsInfos = computed(() => store.state.signs.infos);
 const usersInfos = computed(() => store.state.users.infos);
 
+// 响应式日期，绑定到日历上
 const date = ref(new Date());
 const year = date.value.getFullYear();
 const month = ref(date.value.getMonth() + 1);

@@ -5,19 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const breadcrumbs = computed(()=> route.matched)
-
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const breadcrumbs = computed(() => route.matched);
 </script>
 
 <style scoped lang="scss">
 .el-breadcrumb {
-    background: #fff;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    padding-left: 30px;
+  background: #fff;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
 }
 </style>

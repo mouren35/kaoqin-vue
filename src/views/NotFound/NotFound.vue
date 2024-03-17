@@ -1,6 +1,6 @@
 <template>
   <div class="status-wrapper">
-    <img src="@/assets/images/404.png" alt="">
+    <img src="@/assets/images/404.png" alt="" />
     <p>没有找到</p>
     <router-link to="/">
       <el-button type="primary">回到首页</el-button>
@@ -8,10 +8,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts"></script>
 
-</script>
-
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

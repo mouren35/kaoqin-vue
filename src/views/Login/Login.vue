@@ -22,12 +22,15 @@
       </el-form-item>
 
       <el-form-item>
+        <!-- auto-insert-space:插入空格 -->
         <el-button type="primary" @click="submitForm(ruleFormRef)" auto-insert-space>登录</el-button>
       </el-form-item>
     </el-form>
 
     <div class="users">
+      <!--gutter:栅格间隔-->
       <el-row :gutter="20">
+        <!-- span:栅格占据的列数 -->
         <el-col v-for="item in testUsers" :key="item.email" :span="12">
           <h3>测试账号，<el-button @click="autoLogin({ email: item.email, pass: item.pass })">一键登录</el-button></h3>
           <p>邮箱：{{ item.email }}</p>
@@ -55,11 +58,13 @@ interface User {
 
 const ruleFormRef = ref<FormInstance>();
 
+// 响应式数据
 const ruleForm = reactive<User>({
   email: "",
   pass: "",
 });
 
+// 表单验证规则,照抄element-plus
 const rules = reactive<FormRules>({
   email: [
     { required: true, message: "请输入邮箱", trigger: "blur" },

@@ -206,14 +206,17 @@ const routes: Array<RouteRecordRaw> = [
   },
 ];
 
+// 创建项目的时候就自动生成的
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
 });
 
 router.beforeEach((to, from, next) => {
+  // 到状态管理里获取token
   const token = (store.state as StateAll).users.token;
   const infos = (store.state as StateAll).users.infos;
+  // to.meta.auth看角色到这个界面是否需要权限
   if (to.meta.auth && _.isEmpty(infos)) {
     if (token) {
       store.dispatch("users/infos").then((res) => {

@@ -5,21 +5,25 @@
       <i class="iconfont icon-icon-test"></i>
       <i class="iconfont icon-typescript"></i>
     </span>
+
     <span class="home-header-title">在线考勤系统</span>
+
     <el-dropdown>
       <el-badge :is-dot="isDot">
         <el-icon :size="20"><Bell /></el-icon>
       </el-badge>
+
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item @click="handleNavigate('/apply')" v-if="newsInfo.applicant"
-            >有审批结果消息</el-dropdown-item
-          >
+          <el-dropdown-item @click="handleNavigate('/apply')" v-if="newsInfo.applicant">
+            有审批结果消息
+          </el-dropdown-item>
           <el-dropdown-item @click="handleNavigate('/check')" v-if="newsInfo.approver">有审批请求消息</el-dropdown-item>
           <el-dropdown-item v-if="!newsInfo.applicant && !newsInfo.approver">暂无消息</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
+
     <el-dropdown>
       <el-space class="home-header-space"> <el-avatar :src="(head as string)" /> {{ name }} </el-space>
       <template #dropdown>
@@ -38,6 +42,7 @@ import { useStore } from "@/store";
 import { useRouter } from "vue-router";
 const store = useStore();
 const router = useRouter();
+// 头像和姓名响应式数据
 const head = computed(() => store.state.users.infos.head);
 const name = computed(() => store.state.users.infos.name);
 

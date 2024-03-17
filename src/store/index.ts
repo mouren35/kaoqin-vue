@@ -25,15 +25,20 @@ const vuexLocal = new VuexPersistence<State>({
   reducer: (state) => ({ users: { token: (state as StateAll).users.token } }),
 });
 
+// 1. 导出 key
+// 把StateAll挂到key上,让store有提示
 export const key: InjectionKey<Store<StateAll>> = Symbol();
 
+// 3. 重写 useStore
 export function useStore() {
-  return baseUseStore(key);
+  return baseUseStore(key); // key放进去然后导出useStore,其他文件导入useStore就有提示
 }
 
+// createStore<State>推断mutations和actions的类型
 export default createStore({
   state: {},
   getters: {},
+  // mutations和actions就会自动进行类型推断
   mutations: {},
   actions: {},
   modules: {
